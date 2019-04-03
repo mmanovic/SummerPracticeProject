@@ -1,0 +1,71 @@
+<div class="row">
+  <div class="btn-group-toggle" data-toggle="buttons">
+    <label class="btn btn-secondary" [ngClass]="{'active': selectedListView}">
+      <input type="checkbox" checked autocomplete="off" (click)="setListView(true)"> LIST
+    </label>
+    <label class="btn btn-secondary" [ngClass]="{'active': !selectedListView}">
+        <input type="checkbox" checked autocomplete="off" (click)="setListView(false)"> TABLE
+    </label>
+  </div>
+  <div class="float-right">
+    <div class="btn-group-toggle" data-toggle="buttons">
+      <label class="btn btn-secondary">
+        <input type="checkbox" checked autocomplete="off" [routerLink]="['new']">Add new 
+      </label>
+    </div>
+  </div>
+</div>
+<hr>
+
+<div>
+  <div *ngIf="selectedListView; else table_view">
+    <div class="row mt-2">
+      <ul class="list-group">
+          <li class="list-group-item" *ngFor="let engine of engines">
+            <div class="d-flex justify-content-between">
+              <a [routerLink]="['detail',engine.id]">{{engine.name}}</a>
+              <div class="col-1"></div>
+              <button class="btn btn-danger" (click)="deleteEngine(engine)"><span><i class="fa fa-remove fa-lg"></i></span></button>
+            </div>
+          </li>
+        </ul>
+    </div>
+  </div>
+
+  <ng-template #table_view>
+    <div class="mt-2">
+      <table class="table table-striped mt-2">
+        <thead class="thead-dark">
+          <tr>
+            <th scope="col">#ID</th>
+            <th scope="col">Name</th>
+            <th scope="col">Power</th>
+            <th scope="col">Fuel comsuption</th>
+            <th scope="col">Description</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let engine of engines">
+            <td scope="row">{{engine.id}}</td>
+            <td style="width: 8%">
+              <a [routerLink]="['detail',engine.id]">
+                <span>{{engine.name}}</span>
+              </a>
+            </td>
+            <td style="width: 8%">{{engine.power}}<span> kW</span></td>
+            <td style="width: 8%">{{engine.fuelConsumption}}<span> l</span></td>
+            <td>{{engine.description}}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </ng-template>
+
+  <hr>
+  <div class="row">
+    <button class="btn btn-secondary" (click)="goBack()">Back</button>
+  </div>
+  
+</div>
+
+

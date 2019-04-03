@@ -1,0 +1,29 @@
+<div class="card bg-light">
+  <div class="card-header">
+    <h3>{{name}}
+      <span class="pull-right clickable" (click)="toggle()">
+        <i class="fa fa-2x" [ngClass]="{'fa-angle-down': !showList, 'fa-angle-up': showList}"></i>
+      </span>
+    </h3>
+  </div>
+
+  <div id="collapseOne" class="collapse" [ngClass]="{'show': showList}">
+    <div class="card-body">
+      <div class="text-center" *ngIf="!models">
+        <p class="lead">Loading...</p>
+      </div>
+      <div class="text-center" *ngIf="false || models?.length === 0">
+          <p class="lead">No items</p>
+      </div>
+      <ul class="list-group" *ngIf="false || models?.length > 0">
+        <li class="list-group-item" *ngFor="let model of models">
+          <span>
+            <a routerLink="{{path}}/detail/{{model.id}}"><i class="fa fa-link fa-lg" aria-hidden="true"></i></a>&nbsp;
+            <span *ngIf="model.name; else id">{{model.name}}</span>
+            <ng-template #id>{{model.id}}</ng-template>
+          </span>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>

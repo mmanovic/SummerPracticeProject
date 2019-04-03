@@ -1,0 +1,110 @@
+<div class="container" *ngIf="inventory">
+    <h1>Inventory</h1>
+    <h3 *ngIf="inventory.id">#ID <span>{{inventory.id}}</span></h3>
+    <hr>
+  
+    <div>
+      <form #f="ngForm" (ngSubmit)="onSubmit()">
+
+        <div class="form-group row">
+          <label class="col-sm-3 col-form-label">Model</label>
+          <div class="col-sm-4">
+            <select name="Model" [(ngModel)]="inventory.modelId" class="custom-select"
+              [appModify]="['admin', 'employee']"
+              [ngClass]="{
+                'is-invalid': model.invalid && (model.dirty || model.touched),
+                'is-valid': model.valid && (model.dirty || model.touched)
+              }"
+              required
+              #model="ngModel">
+              <option *ngFor="let m of models" [ngValue]="m.id">{{m.name}}</option>
+            </select>
+            <div class="invalid-feedback" *ngIf="(!inventory.modelId || model.errors) && (model.dirty || model.touched)">
+              <p>Model is required</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group row">
+          <label class="col-sm-3 col-form-label">Salon</label>
+          <div class="col-sm-4">
+            <select name="Salon" [(ngModel)]="inventory.salonId" class="custom-select"
+              [appModify]="['admin', 'employee']"
+              [ngClass]="{
+                'is-invalid': salon.invalid && (salon.dirty || salon.touched),
+                'is-valid': salon.valid && (salon.dirty || salon.touched)
+              }"
+              required
+              #salon="ngModel">
+              <option *ngFor="let s of salons" [ngValue]="s.id">{{s.name}}</option>
+            </select>
+            <div class="invalid-feedback" *ngIf="(!inventory.salonId || salon.errors) && (salon.dirty || salon.touched)">
+              <p>Salon is required</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group row">
+          <label class="col-sm-3 col-form-label">Price</label>
+          <div class="col-sm-4">
+            <input class="form-control"
+             [appModify]="['admin', 'employee']"
+              [ngClass]="{
+                'is-invalid': price.invalid && (price.dirty || price.touched),
+                'is-valid': price.valid && (price.dirty || price.touched)
+              }"
+              [(ngModel)]="inventory.price" 
+              type="number" 
+              name="price_name" 
+              placeholder="e.g. 12"
+              required
+              [min]="0"
+              #price="ngModel">
+              <div class="invalid-feedback" *ngIf="price.errors && (price.dirty || price.touched)">
+                <p *ngIf="price.errors.required">Price is required</p>
+                <p *ngIf="price.errors.min">Price must be a positive number</p>
+              </div>
+          </div>
+          <label class="col-1 col-form-label">€</label>
+        </div>
+  
+        <div class="form-group row">
+          <label class="col-sm-3 col-form-label">Units on stock</label>
+          <div class="col-sm-4">
+            <input class="form-control"
+              [appModify]="['admin', 'employee']"
+              [ngClass]="{
+                'is-invalid': units.invalid && (units.dirty || units.touched),
+                'is-valid': units.valid && (units.dirty || units.touched)
+              }"
+              [(ngModel)]="inventory.numberOfUnitsOnStock" 
+              type="number" 
+              step="1"
+              name="units_name" 
+              placeholder="e.g. 30"
+              required
+              [min]="0"
+              #units="ngModel">
+              <div class="invalid-feedback" *ngIf="units.errors && (units.dirty || units.touched)">
+                <p *ngIf="units.errors.required">Number of units is required</p>
+                <p *ngIf="units.errors.min">Number of units must be a positive number</p>
+              </div>
+          </div>
+        </div>
+
+        <div class="form-group row" *canAccess="['admin','employee']">
+          <div class="offset-sm-3 col-sm-4">
+            <button type="submit" class="btn btn-secondary active"
+              [disabled]="f.invalid || !f.dirty">Save</button>
+          </div>
+        </div>
+      </form>
+    </div>
+    <hr>
+  
+    <div class="row">
+      <button class="btn btn-secondary" (click)="goBack()">Back</button>
+    </div>
+  
+  </div>
+  

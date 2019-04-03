@@ -1,0 +1,106 @@
+<div class="container" *ngIf="salon">
+    <h1>Salon: {{salon.name}}</h1>
+    <h3 *ngIf="salon.id">#ID <span>{{salon.id}}</span></h3>
+    <hr>
+  
+    <div>
+      <form #f="ngForm" (ngSubmit)="onSubmit()">
+
+        <div class="form-group row"> 
+          <label class="col-sm-3 col-form-label">Name</label>
+          <div class="col-sm-4">
+            <input class="form-control"
+              [appModify]="['admin']"
+              [ngClass]="{
+                'is-invalid': name.invalid && (name.dirty || name.touched),
+                'is-valid': name.valid && (name.dirty || name.touched)
+              }"
+              [(ngModel)]="salon.name" 
+              type="text" 
+              name="name_input"
+              placeholder="e.g. AK Zubak"
+              required
+              maxlength="200"
+              #name="ngModel">
+              <div class="invalid-feedback" *ngIf="name.errors && (name.dirty || name.touched)">
+                <p *ngIf="name.errors.required">Name is required</p>
+                <p *ngIf="name.errors.maxlength">Name is too long</p>
+              </div>
+          </div>
+        </div>
+
+        <div class="form-group row">
+          <label class="col-sm-3 col-form-label">City</label>
+          <div class="col-sm-4">
+            <select name="City" [(ngModel)]="salon.cityId" class="custom-select"
+              [appModify]="['admin']"
+              [ngClass]="{
+                'is-invalid': city.invalid && (city.dirty || city.touched),
+                'is-valid': city.valid && (city.dirty || city.touched)
+              }"
+              required
+              #city="ngModel">
+              <option *ngFor="let c of cities" [ngValue]="c.id">{{c.name}}</option>
+            </select>
+            <div class="invalid-feedback" *ngIf="(!salon.cityId || city.errors) && (city.dirty || city.touched)">
+              <p>City is required</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group row">
+          <label class="col-sm-3 col-form-label">Country</label>
+          <div class="col-sm-4">
+            <select name="Country" [(ngModel)]="salon.countryId" class="custom-select"
+              [appModify]="['admin']"
+              [ngClass]="{
+                'is-invalid': country.invalid && (country.dirty || country.touched),
+                'is-valid': country.valid && (country.dirty || country.touched)
+              }"
+              required
+              #country="ngModel">
+              <option *ngFor="let c of countries" [ngValue]="c.id">{{c.name}}</option>
+            </select>
+            <div class="invalid-feedback" *ngIf="(!salon.countryId || country.errors) && (country.dirty || country.touched)">
+              <p>Country is required</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group row">
+          <label class="col-sm-3 col-form-label">Description</label>
+          <div class="col-sm-8">
+            <textarea class="form-control" 
+              [appModify]="['admin']"
+              [(ngModel)]="salon.description"
+              rows="5" 
+              name="desc_name" 
+              placeholder="e.g. Lorem ipsum..."></textarea>
+          </div>
+        </div>
+
+        <div class="form-group row" *canAccess="['admin']">
+          <div class="offset-sm-3 col-sm-4">
+            <button type="submit" class="btn btn-secondary active"
+              [disabled]="f.invalid || !f.dirty">Save</button>
+          </div>
+        </div>
+      </form>
+    </div>
+    <hr>
+  
+    <div class="row">
+      <button class="btn btn-secondary" (click)="goBack()">Back</button>
+    </div>
+  
+    <div *ngIf="salon.id">
+      <br>
+      <h4>View inventories</h4>
+      <br>
+  
+      <div class="accordion" id="listview">
+        <app-model-listing [name]="'Inventories'" [path]="'/inventories'" [modelsGetter]="getSalonInventories()"></app-model-listing>
+      </div>
+    </div>
+  </div>
+  

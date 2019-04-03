@@ -1,0 +1,37 @@
+<h2>Equipments</h2>
+<div class="container">
+  <div *canAccess="['admin']">
+    <div class="row">
+      <div class="float-right">
+        <div class="btn-group-toggle" data-toggle="buttons">
+          <label class="btn btn-secondary">
+            <input type="checkbox" checked autocomplete="off" [routerLink]="['new']">Add new
+          </label>
+        </div>
+      </div>
+    </div>
+    <hr>
+  </div>
+
+  <div class="row mt-2">
+    <ul class="list-group">
+      <li class="row list-group-item" *ngFor="let equipment of equipments">
+        <div class="d-flex justify-content-between">
+          <a [routerLink]="['detail',equipment.id]">{{equipment.name}}</a>
+          <div class="col-1"></div>
+          <button class="btn btn-danger" *canAccess="['admin']" (click)="deleteEquipment(equipment)">
+            <span>
+              <i class="fa fa-remove fa-lg"></i>
+            </span>
+          </button>
+        </div>
+      </li>
+    </ul>
+  </div>
+
+  <hr>
+  <div class="row">
+    <button class="btn btn-secondary" (click)="goBack()">Back</button>
+  </div>
+
+</div>

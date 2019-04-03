@@ -1,0 +1,69 @@
+<div class="container" *ngIf="city">
+  <h1>City: {{city.name}}</h1>
+  <h3 *ngIf="city.id">#ID <span>{{city.id}}</span></h3>
+  <hr>
+  
+  <div>
+    <form #f="ngForm" (ngSubmit)="onSubmit()">
+
+      <div class="form-group row"> 
+        <label class="col-sm-3 col-form-label">Name</label>
+        <div class="col-sm-4">
+          <input class="form-control"
+            [appModify]="['admin']"
+            [ngClass]="{
+              'is-invalid': name.invalid && (name.dirty || name.touched),
+              'is-valid': name.valid && (name.dirty || name.touched)
+            }"
+            [(ngModel)]="city.name" 
+            type="text" 
+            name="name_input" 
+            placeholder="e.g. London"
+            required
+            maxlength="200"
+            #name="ngModel">
+          <div class="invalid-feedback" *ngIf="name.errors && (name.dirty || name.touched)">
+            <p *ngIf="name.errors.required">Name is required</p>
+            <p *ngIf="name.errors.maxlength">Name is too long</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-group row">
+        <label class="col-sm-3 col-form-label">Description</label>
+        <div class="col-sm-8">
+          <textarea class="form-control"
+            [appModify]="['admin']"
+            [(ngModel)]="city.description"
+            rows="5" 
+            name="desc_name" 
+            placeholder="e.g. Lorem ipsum..."></textarea>
+        </div>
+      </div>
+
+      <div class="form-group row"  *canAccess="['admin']">
+        <div class="offset-sm-3 col-sm-4">
+          <button type="submit" class="btn btn-secondary active"
+            [disabled]="f.invalid || !f.dirty">Save</button>
+        </div>
+      </div>
+
+    </form>
+  </div>
+  <hr>
+
+  <div class="row">
+    <button class="btn btn-secondary" (click)="goBack()">Back</button>
+  </div>
+
+  <div *ngIf="city.id">
+    <br>
+    <h4>Also view salons and manufacturers in this city</h4>
+    <br>
+    
+    <div class="accordion" id="listview">
+      <app-model-listing [name]="'Salons'" [path]="'/salons'" [modelsGetter]="getCitySalons()"></app-model-listing>
+      <app-model-listing [name]="'Manufacturers'" [path]="'/manufacturers'" [modelsGetter]="getCityManufacturers()"></app-model-listing>
+    </div>
+  </div>
+</div>

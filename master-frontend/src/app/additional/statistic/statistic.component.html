@@ -1,0 +1,89 @@
+<div class="conteiner">
+  <div class="row justify-content-center">
+    <div class="col-md-4 justify-content-center">
+      <button class="btn btn-secondary" [ngClass]="{'active': showPrices, '': !showPrices}" 
+        (click)="showPricesView(true)">Average price per car models</button>
+    </div>
+    <div class="col-2"></div>
+    <div class="col-md-4 justify-content-center">
+      <button class="btn btn-secondary" [ngClass]="{'active': !showPrices, '': showPrices}" 
+        (click)="showPricesView(false)">Engine types parts per manufacturer</button>
+    </div>
+  </div>
+  <div class="row mt-5 justify-content-center">
+
+    <div class="card text-center"  *ngIf="showPrices">
+      <div class="card-header">
+        Average price per each model
+      </div>
+      <div class="card-body">
+        <p *ngIf="!models">Loading...</p>
+        <p *ngIf="models?.length === 0">No result</p>
+        <table class="table" *ngIf="models && models.length > 0">
+          <thead>
+            <tr>
+              <th scope="col">Model</th>
+              <th scope="col">Average price</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let model of models">
+              <td scope="row" class="text-left">
+                <span>
+                  <a routerLink="/models/{{model.id}}"><i class="fa fa-link fa-lg" aria-hidden="true"></i></a>&nbsp;{{model.name}}
+                </span>
+              </td>
+              <td *ngIf="model.averagePrice">{{model.averagePrice | currency:'EUR':'symbol-narrow'}}</td>
+              <td *ngIf="!model.averagePrice">N/A</td>              
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="card text-center"  *ngIf="!showPrices">
+      <div class="card-header">
+        Engine types parts per each manufacturer
+      </div>
+      <div class="card-body">
+        <p *ngIf="!parts">Loading...</p>
+        <p *ngIf="parts?.engineTypes?.length === 0 || parts?.table?.length === 0">No result</p>
+        <table class="table" *ngIf="parts?.engineTypes?.length > 0 && parts?.table?.length > 0">
+          <thead>
+            <tr>
+              <th scope="col">Manufacturer\Engine type</th>
+              <th scope="col" *ngFor="let et of parts.engineTypes">
+                <span>
+                  <a routerLink="/engineTypes/{{et.id}}"><i class="fa fa-link fa-lg" aria-hidden="true"></i></a>&nbsp;{{et.name}}
+                </span>
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let m of parts.table">
+              <td scope="row" class="text-left">
+                <span>
+                  <a routerLink="/manufacturers/{{m.manufacturerId}}"><i class="fa fa-link fa-lg" aria-hidden="true"></i></a>&nbsp;
+                  {{m.manufacturerName}}
+                </span>
+              </td>
+              <td *ngFor="let et of parts.engineTypes">
+                <div *ngIf="hasElements(m.engineTypeParts); else noItem">
+                  <div *ngIf="m.engineTypeParts[et.id]; else zero">
+                    {{m.engineTypeParts[et.id] | percent:'.2'}}
+                  </div>
+                  <ng-template #zero>
+                      {{0 | percent:'.2'}}
+                  </ng-template>
+                </div>
+                <ng-template #noItem>
+                  N/A
+                </ng-template>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>

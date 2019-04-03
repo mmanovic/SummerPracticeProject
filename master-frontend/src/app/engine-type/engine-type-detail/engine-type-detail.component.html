@@ -1,0 +1,68 @@
+<div class="container" *ngIf="engineType">
+    <h1>Engine type: {{engineType.name}}</h1>
+    <h3 *ngIf="engineType.id">#ID <span>{{engineType.id}}</span></h3>
+    <hr>
+    
+    <div>
+      <form #f="ngForm" (ngSubmit)="onSubmit()">
+  
+        <div class="form-group row"> 
+          <label class="col-sm-3 col-form-label">Name</label>
+          <div class="col-sm-4">
+            <input class="form-control"
+              [appModify]="['admin']"
+              [ngClass]="{
+                'is-invalid': name.invalid && (name.dirty || name.touched),
+                'is-valid': name.valid && (name.dirty || name.touched)
+              }"
+              [(ngModel)]="engineType.name" 
+              type="text" 
+              name="name_input" 
+              placeholder="e.g. Diesel"
+              required
+              maxlength="200"
+              #name="ngModel">
+            <div class="invalid-feedback" *ngIf="name.errors && (name.dirty || name.touched)">
+              <p *ngIf="name.errors.required">Name is required</p>
+              <p *ngIf="name.errors.maxlength">Name is too long</p>
+            </div>
+          </div>
+        </div>
+  
+        <div class="form-group row">
+          <label class="col-sm-3 col-form-label">Description</label>
+          <div class="col-sm-4">
+            <textarea class="form-control" 
+              [(ngModel)]="engineType.description"
+              [appModify]="['admin']"
+              rows="5" 
+              name="desc_name" 
+              placeholder="e.g. Diesel motor of this type..."></textarea>
+          </div>
+        </div>
+  
+        <div class="form-group row" *canAccess="['admin']">
+          <div class="offset-sm-3 col-sm-4">
+            <button type="submit" class="btn btn-secondary active" 
+              [disabled]="f.invalid || !f.dirty">Save</button>
+          </div>
+        </div>
+  
+      </form>
+    </div>
+    <hr>
+  
+    <div class="row">
+      <button class="btn btn-secondary" (click)="goBack()">Back</button>
+    </div>
+  
+    <div *ngIf="engineType.id">
+      <br>
+      <h4>Also view engines made of this engine type</h4>
+      <br>
+      
+      <div class="accordion" id="listview">
+        <app-model-listing [name]="'Engines'" [path]="'/engines'" [modelsGetter]="getEngineTypeEngines()"></app-model-listing>
+      </div>
+    </div>
+  </div>

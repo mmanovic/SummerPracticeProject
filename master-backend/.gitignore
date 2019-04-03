@@ -1,0 +1,13 @@
+﻿################################################################################
+# This .gitignore file was automatically created by Microsoft(R) Visual Studio.
+################################################################################
+
+*.suo
+*.user
+*.vs
+_ReSharper.*
+packages
+bin
+obj
+packages
+/Frontend/AVLCarSystem

@@ -1,0 +1,131 @@
+<div class="container" *ngIf="model">
+  <h1>Model: {{model.name}}</h1>
+  <h3 *ngIf="model.id">#ID
+    <span>{{model.id}}</span>
+  </h3>
+  <hr>
+
+  <div>
+    <form #f="ngForm" (ngSubmit)="onSubmit()">
+
+      <div class="form-group row">
+        <label class="col-sm-3 col-form-label">Name</label>
+        <div class="col-sm-4">
+          <input class="form-control" [appModify]="['admin']" [ngClass]="{
+                'is-invalid': name.invalid && (name.dirty || name.touched),
+                'is-valid': name.valid && (name.dirty || name.touched)
+              }" [(ngModel)]="model.name" type="text" name="name_input" placeholder="e.g. BMW X5" required maxlength="200"
+            #name="ngModel">
+          <div class="invalid-feedback" *ngIf="name.errors && (name.dirty || name.touched)">
+            <p *ngIf="name.errors.required">Name is required</p>
+            <p *ngIf="name.errors.maxlength">Name is too long</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-group row">
+        <label class="col-sm-3 col-form-label">Manufacturer</label>
+        <div class="col-sm-4">
+          <select name="Manufacturer" [(ngModel)]="model.manufacturerId" class="custom-select" [appModify]="['admin']" [ngClass]="{
+                'is-invalid': man.invalid && (man.dirty || man.touched),
+                'is-valid': man.valid && (man.dirty || man.touched)
+              }" required #man="ngModel">
+            <option *ngFor="let m of manufacturers" [ngValue]="m.id">{{m.name}}</option>
+          </select>
+          <div class="invalid-feedback" *ngIf="(!model.manufacturerId || man.errors) && (man.dirty || man.touched)">
+            <p>Manufacturer is required</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-group row">
+        <label class="col-sm-3 col-form-label">Engine</label>
+        <div class="col-sm-4">
+          <select name="Engine" [(ngModel)]="model.engineId" class="custom-select" [appModify]="['admin']" [ngClass]="{
+                'is-invalid': e.invalid && (e.dirty || e.touched),
+                'is-valid': e.valid && (e.dirty || e.touched)
+              }" required #e="ngModel">
+            <option *ngFor="let e of engines" [ngValue]="e.id">{{e.name}}</option>
+          </select>
+          <div class="invalid-feedback" *ngIf="(!model.engineId || e.errors) && (e.dirty || e.touched)">
+            <p>Engine is required</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-group row">
+        <label class="col-sm-3 col-form-label">Equipment</label>
+        <div class="col-sm-4">
+          <select name="Equipment" [(ngModel)]="model.equipmentId" class="custom-select" [appModify]="['admin']" [ngClass]="{
+                'is-invalid': e.invalid && (e.dirty || e.touched),
+                'is-valid': e.valid && (e.dirty || e.touched)
+              }" required #e="ngModel">
+            <option *ngFor="let e of equipments" [ngValue]="e.id">{{e.name}}</option>
+          </select>
+          <div class="invalid-feedback" *ngIf="(!model.equipmentId || e.errors) && (e.dirty || e.touched)">
+            <p>Equipment is required</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-group row">
+        <label class="col-sm-3 col-form-label">Year</label>
+        <div class="col-sm-4">
+          <input class="form-control" [appModify]="['admin']" [ngClass]="{
+                'is-invalid': year.invalid && (year.dirty || year.touched),
+                'is-valid': year.valid && (year.dirty || year.touched)
+              }" [(ngModel)]="model.year" type="number" step="1" name="Year" placeholder="e.g. 2018" required [min]="1900"
+            [max]="thisYear" #year="ngModel">
+          <div class="invalid-feedback" *ngIf="year.errors && (year.dirty || year.touched)">
+            <p *ngIf="year.errors.required">Year is required</p>
+            <p *ngIf="year.errors.min">Year must be greater or equal than 1900</p>
+            <p *ngIf="year.errors.max">Year can't be greater than {{thisYear}}</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-group row">
+        <label class="col-sm-3 col-form-label">Number of doors</label>
+        <div class="col-sm-4">
+          <input class="form-control" [appModify]="['admin']" [ngClass]="{
+                'is-invalid': doors.invalid && (doors.dirty || doors.touched),
+                'is-valid': doors.valid && (doors.dirty || doors.touched)
+              }" [(ngModel)]="model.numberOfDoors" type="number" step="1" name="Doors" placeholder="e.g. 5" required [min]="0"
+            #doors="ngModel">
+          <div class="invalid-feedback" *ngIf="doors.errors && (doors.dirty || doors.touched)">
+            <p *ngIf="doors.errors.required">Number of doors is required</p>
+            <p *ngIf="doors.errors.min">Number of doors must be a positive number</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-group row">
+        <label class="col-sm-3 col-form-label">Description</label>
+        <div class="col-sm-8">
+          <textarea class="form-control" [appModify]="['admin']" [(ngModel)]="model.description" rows="5" name="desc_name" placeholder="e.g. Lorem ipsum..."></textarea>
+        </div>
+      </div>
+
+      <div class="form-group row" *canAccess="['admin']">
+        <div class="offset-sm-3 col-sm-4">
+          <button type="submit" class="btn btn-secondary active" [disabled]="f.invalid || !f.dirty">Save</button>
+        </div>
+      </div>
+    </form>
+  </div>
+  <hr>
+
+  <div class="row">
+    <button class="btn btn-secondary" (click)="goBack()">Back</button>
+  </div>
+
+  <div *ngIf="model.id">
+    <br>
+    <h4>View inventories</h4>
+    <br>
+
+    <div class="accordion" id="listview">
+      <app-model-listing [name]="'Inventories'" [path]="'/inventories'" [modelsGetter]="getModelInventories()"></app-model-listing>
+    </div>
+  </div>
+</div>

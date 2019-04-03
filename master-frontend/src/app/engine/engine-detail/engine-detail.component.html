@@ -1,0 +1,134 @@
+<div class="container" *ngIf="engine">
+  <h1>Motor engine: {{engine.name}}</h1>
+  <h3 *ngIf="engine.id">#ID <span>{{engine.id}}</span></h3>
+  <hr>
+
+  <div>
+    <form #f="ngForm" (ngSubmit)="onSubmit()">
+      <div class="form-group row"> 
+        <label class="col-sm-3 col-form-label">Name</label>
+        <div class="col-sm-4">
+          <input class="form-control"
+            [appModify]="['admin']" 
+            [ngClass]="{
+              'is-invalid': name.invalid && (name.dirty || name.touched),
+              'is-valid': name.valid && (name.dirty || name.touched)
+            }"
+            [(ngModel)]="engine.name" 
+            type="text" 
+            name="name_input" 
+            placeholder="e.g. 2.0 TDI"
+            required
+            maxlength="200"
+            #name="ngModel">
+            <div class="invalid-feedback" *ngIf="name.errors && (name.dirty || name.touched)">
+              <p *ngIf="name.errors.required">Name is required</p>
+              <p *ngIf="name.errors.maxlength">Name is too long</p>
+            </div>
+        </div>
+      </div>
+
+      <div class="form-group row">
+        <label class="col-sm-3 col-form-label">Engine type</label>
+        <div class="col-sm-4">
+          <select name="EngineType" [(ngModel)]="engine.engineTypeId" class="custom-select"
+            [appModify]="['admin']"
+            [ngClass]="{
+              'is-invalid': et.invalid && (et.dirty || et.touched),
+              'is-valid': et.valid && (et.dirty || et.touched)
+            }"
+            required
+            #et="ngModel">
+            <option *ngFor="let e of engineTypes" [ngValue]="e.id">{{e.name}}</option>
+          </select>
+          <div class="invalid-feedback" *ngIf="(!engine.engineTypeId || et.errors) && (et.dirty || et.touched)">
+            <p>Engine type is required</p>
+          </div>
+        </div>
+      </div>
+      
+      <div class="form-group row">
+        <label class="col-sm-3 col-form-label">Power</label>
+        <div class="col-sm-4">
+          <input class="form-control"
+            [appModify]="['admin']"
+            [ngClass]="{
+              'is-invalid': power.invalid && (power.dirty || power.touched),
+              'is-valid': power.valid && (power.dirty || power.touched)
+            }"
+            [(ngModel)]="engine.power" 
+            type="number" 
+            name="power_name" 
+            placeholder="e.g. 127"
+            required
+            [min]="0"
+            #power="ngModel">
+            <div class="invalid-feedback" *ngIf="power.errors && (power.dirty || power.touched)">
+              <p *ngIf="power.errors.required">Power is required</p>
+              <p *ngIf="power.errors.min">Power must be a positive number</p>
+            </div>
+        </div>
+        <label class="col-1 col-form-label">kW</label>
+      </div>
+
+      <div class="form-group row">
+        <label class="col-sm-3 col-form-label">Fuel consumption</label>
+        <div class="col-sm-4">
+          <input class="form-control"
+            [appModify]="['admin']"
+            [ngClass]="{
+              'is-invalid': fuel.invalid && (fuel.dirty || fuel.touched),
+              'is-valid': fuel.valid && (fuel.dirty || fuel.touched)
+            }"
+            [(ngModel)]="engine.fuelConsumption" 
+            type="number" 
+            name="fuel_name" 
+            placeholder="e.g. 9.2"
+            required
+            [min]="0"
+            #fuel="ngModel">
+            <div class="invalid-feedback" *ngIf="fuel.errors && (fuel.dirty || fuel.touched)">
+              <p *ngIf="fuel.errors.required">Fuel consumption is required</p>
+              <p *ngIf="fuel.errors.min">Fuel consumption must be a positive number</p>
+            </div>
+        </div>
+        <label class="col-1 col-form-label">Liters</label>
+      </div>
+
+      <div class="form-group row">
+        <label class="col-sm-3 col-form-label">Description</label>
+        <div class="col-sm-4">
+          <textarea class="form-control" 
+            [appModify]="['admin']"
+            [(ngModel)]="engine.description"
+            rows="5" 
+            name="desc_name" 
+            placeholder="e.g. Lorem ipsum..."></textarea>
+        </div>
+      </div>
+      
+      <div class="form-group row" *canAccess="['admin']">
+        <div class="offset-sm-3 col-sm-4">
+          <button type="submit" class="btn btn-secondary active" 
+            [disabled]="f.invalid || !f.dirty">Save</button>
+        </div>
+      </div>
+    </form>
+  </div>
+  <hr>
+
+  <div class="row">
+    <button class="btn btn-secondary" (click)="goBack()">Back</button>
+  </div>
+
+  <div *ngIf="engine.id">
+    <br>
+    <h4>Also view car models which are using this engine</h4>
+    <br>
+
+    <div class="accordion" id="listview">
+      <app-model-listing [name]="'Models'" [path]="'/models'" [modelsGetter]="getModels()"></app-model-listing>
+    </div>
+  </div>
+    
+</div>

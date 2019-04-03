@@ -1,0 +1,40 @@
+<h2>Inventories</h2>
+<div class="container">
+  <div *canAccess="['admin','employee']">
+    <div class="row">
+      <div class="float-right">
+        <div class="btn-group-toggle" data-toggle="buttons">
+          <label class="btn btn-secondary">
+            <input type="checkbox" checked autocomplete="off" [routerLink]="['new']">Add new
+          </label>
+        </div>
+      </div>
+    </div>
+    <hr>
+  </div>
+
+  <div class="row mt-2">
+    <ul class="list-group">
+      <li class="row list-group-item" *ngFor="let inventory of inventories">
+        <div class="d-flex justify-content-between">
+          <a [routerLink]="['detail',inventory.id]">
+            Inventory ID
+            <span>{{inventory.id}}</span>
+          </a>
+          <div class="col-1"></div>
+          <button class="btn btn-danger" *canAccess="['admin','employee']" (click)="deleteInventory(inventory)">
+            <span>
+              <i class="fa fa-remove fa-lg"></i>
+            </span>
+          </button>
+        </div>
+      </li>
+    </ul>
+  </div>
+
+  <hr>
+  <div class="row">
+    <button class="btn btn-secondary" (click)="goBack()">Back</button>
+  </div>
+
+</div>

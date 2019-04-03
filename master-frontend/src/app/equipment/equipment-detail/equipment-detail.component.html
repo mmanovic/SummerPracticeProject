@@ -1,0 +1,113 @@
+<div class="container" *ngIf="equipment">
+    <h1>Equipment {{equipment.name}}</h1>
+    <h3 *ngIf="equipment.id">#ID <span>{{equipment.id}}</span></h3>
+    <hr>
+  
+    <div>
+      <form #f="ngForm" (ngSubmit)="onSubmit()">
+        <div class="form-group row"> 
+          <label class="col-sm-3 col-form-label">Name</label>
+          <div class="col-sm-4">
+            <input class="form-control"
+              [appModify]="['admin']"
+              [ngClass]="{
+                'is-invalid': name.invalid && (name.dirty || name.touched),
+                'is-valid': name.valid && (name.dirty || name.touched)
+              }"
+              [(ngModel)]="equipment.name" 
+              type="text" 
+              name="name_input" 
+              placeholder="e.g. Basic"
+              required
+              maxlength="200"
+              #name="ngModel">
+              <div class="invalid-feedback" *ngIf="name.errors && (name.dirty || name.touched)">
+                <p *ngIf="name.errors.required">Name is required</p>
+                <p *ngIf="name.errors.maxlength">Name is too long</p>
+              </div>
+          </div>
+        </div>
+
+        <div class="form-group row"> 
+          <label class="col-sm-3 col-form-label">Color</label>
+          <div class="col-sm-4">
+            <input class="form-control"
+              [appModify]="['admin']"
+              [ngClass]="{
+                'is-invalid': color.invalid && (color.dirty || color.touched),
+                'is-valid': color.valid && (color.dirty || color.touched)
+              }"
+              [(ngModel)]="equipment.color" 
+              type="text" 
+              name="color_input" 
+              placeholder="e.g. Blue"
+              required
+              maxlength="200"
+              #color="ngModel">
+              <div class="invalid-feedback" *ngIf="color.errors && (color.dirty || color.touched)">
+                <p *ngIf="color.errors.required">Color is required</p>
+                <p *ngIf="color.errors.maxlength">Color is too long</p>
+              </div>
+          </div>
+        </div>
+
+        <div class="form-group row">
+          <label class="col-sm-3 col-form-label">Description</label>
+          <div class="col-sm-8">
+            <textarea class="form-control" 
+              [appModify]="['admin']"
+              [(ngModel)]="equipment.description"
+              rows="5" 
+              name="desc_name" 
+              placeholder="e.g. Lorem ipsum..."></textarea>
+          </div>
+        </div>
+
+        <div class="form-group row">
+          <div class="offset-sm-3 col-sm-4">
+            <div class="form-check">
+              <input class="form-check-input" 
+              [appModify]="['admin']"
+              type="checkbox" [(ngModel)]="equipment.airConditioning" name="air">
+              <label class="form-check-label">Air conditioning</label>
+            </div>
+          </div>
+        </div>
+       
+        <div class="form-group row">
+          <div class="offset-sm-3 col-sm-4">
+            <div class="form-check">
+              <input class="form-check-input" 
+              [appModify]="['admin']"              
+              type="checkbox" [(ngModel)]="equipment.automaticTransmission" name="transmission">
+              <label class="form-check-label">Automatic transmission</label>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group row" *canAccess="['admin']">
+          <div class="offset-sm-3 col-sm-4">
+            <button type="submit" class="btn btn-secondary active"
+              [disabled]="f.invalid || !f.dirty">Save</button>
+          </div>
+        </div>
+      </form>
+    </div>
+    <hr>
+  
+    <div class="row">
+      <button class="btn btn-secondary" (click)="goBack()">Back</button>
+    </div>
+  
+    <div *ngIf="equipment.id">
+      <br>
+      <h4>This equipment is included in folowing car models shown below</h4>
+      <br>
+  
+      <div class="accordion" id="listview">
+        <app-model-listing [name]="'Models'" [path]="'/models'" [modelsGetter]="getEquipmentModels()"></app-model-listing>
+      </div>
+    </div>
+      
+  </div>
+  

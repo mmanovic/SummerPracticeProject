@@ -1,0 +1,24 @@
+<nav class="navbar navbar-dark bg-dark mb-5">
+  <a class="navbar-brand" routerLink="/">AVL Car System</a>
+  <div class="navbar-expand mr-auto">
+    <div class="navbar-nav">
+      <a class="nav-item nav-link" routerLink="/statistic">Statistic</a>
+      <a class="nav-item nav-link" href="#">About</a>
+    </div>
+  </div>
+  <div class="navbar-expand ml-auto navbar-nav">
+    <div class="navbar-nav">
+      <a class="nav-item nav-link" href *ngIf="authenticated" (click)="$event.preventDefault();">
+        <span><i class="fa fa-user-circle"></i>&nbsp;{{username}}</span>
+      </a>
+      <a class="nav-item nav-link" href *ngIf="authenticated" (click)="$event.preventDefault(); logout()">
+        <span><i class="fa fa-sign-in-alt"></i>&nbsp;Logout</span>
+      </a>
+      <a class="nav-item nav-link" href *ngIf="!authenticated" (click)="$event.preventDefault(); login()">
+        <span><i class="fa fa-sign-in-alt"></i>&nbsp;Login</span>
+      </a>
+    </div>
+  </div>
+</nav>
+<!-- (click)="keycloakService.clearToken()" *ngIf="keycloakService.isLoggedIn()"
+(click)="keycloakService.login()" *ngIf="!keycloakService.isLoggedIn()" -->
